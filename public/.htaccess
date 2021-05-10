@@ -1,0 +1,8 @@
+RewriteEngine On
+RewriteBase /
+
+#RewriteCond %{THE_REQUEST} ([^\s?]*) [NC]
+#RewriteRule ^ %1 [L,NE,R=302]
+RewriteRule ^(css|js|image) - [L]
+
+RewriteRule ^(.*)$ index.php?path=$1 [L,NC,QSA]
