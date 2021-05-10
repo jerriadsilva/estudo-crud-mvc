@@ -1,6 +1,9 @@
 <?php
 namespace app\core;
 
+use \app\core\Session;
+use \app\model\User;
+
 class Views
 {
 	public static function load(string $view, $Params = [], $PageSubTitle = '', $PageTitle = '')
@@ -17,12 +20,17 @@ class Views
 		{
 			die('Incorrect layout or view file');
 		}
-		
+
 		$Params = $Params??[];
 		foreach($Params as $VariableName => $VariableValue)
 		{
 			${$VariableName} = $VariableValue;
 		}
+
+		$LoggedUser = (new User(Session::Get('userdata')->id??0))->userdata();
+
 		require $layoutFile;
+
+		die();
 	}
 }

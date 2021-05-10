@@ -1,7 +1,7 @@
 <?php
 namespace app\controller;
 
-use app\core\Request;
+use \app\core\Request;
 use \app\core\Session;
 use \app\core\Views;
 use \app\model\User;

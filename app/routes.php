@@ -7,14 +7,15 @@ use \app\core\Routes;
 
 //use \app\controller\MainController;
 
-Routes::get('/', 'MainController@List');
+Routes::get('/', 'MainController@index');
 
-Routes::get('/user/new', 'MainController@New');
-Routes::post('/user/new', 'MainController@SaveNew');
+Routes::get('/users', 'UserController@List');
+Routes::get('/user/new', 'UserController@New');
+Routes::post('/user/new', 'UserController@SaveNew');
 
 
-Routes::get('/user/edit/{id}', 'MainController@Edit');
-Routes::post('/user/edit/{id}', 'MainController@SaveEdition');
+Routes::get('/user/edit/{id}', 'UserController@Edit');
+Routes::post('/user/edit/{id}', 'UserController@SaveEdition');
 
 Routes::get('/logout', 'Login@Logout');
 Routes::get('/login', 'Login@LoginView');

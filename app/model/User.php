@@ -13,8 +13,9 @@ class User
 	private $UserDefault = [
 		'name'		=> '',
 		'email'		=> '',
-		'passwd'	=> '',
-		'level'		=> 0
+		'passwd'		=> '',
+		'level'		=> 0,
+		'admin'		=> false
 	];
 	const LevelAdmin	= 1;
 	const TABLE = TBL_PREFIX.'users';
@@ -23,8 +24,8 @@ class User
 
 	public function __construct(int $userid = 0)
 	{
-		$this->UserData 		= new stdClass();
-		$this->UserDefault 		= (object) $this->UserDefault;
+		$this->UserData 		= new \stdClass();
+		$this->UserDefault 	= (object) $this->UserDefault;
 		$this->DB 				= new Db(DB_HOST,DB_NAME,DB_USER,DB_PASS);
 
 		if($userid > 0)
@@ -58,7 +59,12 @@ class User
 	public function level(){ return $this->UserData->level; }
 	public function id(){ return $this->UserData->id; }
 	public function admin($Level = null){ return ($Level ?? $this->UserData->level) >= self::LevelAdmin; }
-	public function userdata(){ return ($this->UserData ?? (object) $this->UserDefault); }
+	public function userdata()
+	{
+		return !empty((array)$this->UserData)
+					? $this->UserData
+					: $this->UserDefault;
+	}
 
 	public static function Logged()
 	{
@@ -102,13 +108,12 @@ class User
 		}
 
 		$this->UserData->id = $User->id;
-
+		$this->UserData->admin = $User->level >= self::LevelAdmin;
+		//var_dump($this->UserData);die();
 		foreach(array_keys((array)$this->UserDefault) as $Field)
 		{
 			$this->UserData->{$Field} = $User->{$Field};
 		}
-
-		$this->UserData->admin = $User->level >= self::LevelAdmin;
 
 		return $this->UserData;
 	}
@@ -119,14 +124,14 @@ class User
 
 		$this->FillUserData($userData, 'UserDefault');
 
-		$this->UserDefault['passwd'] = password_hash($this->UserDefault['passwd'], PASSWORD_BCRYPT);
+		$this->UserDefault->passwd = password_hash($this->UserDefault->passwd, PASSWORD_BCRYPT);
 
 		$Status = $this->DB->Insert(self::TABLE, $this->UserDefault);
 
 		if($Status !== false)
 		{
 			$this->Find($this->DB->InsertId);
-			return true;
+			Request::Redirect('/users');
 		}
 		return false;
 	}
@@ -150,7 +155,7 @@ class User
 
 		$Status = $this->DB->Update(self::TABLE, $this->UserData->id, $FieldsUpdated);
 
-		return $Status !== false;
+		Request::Redirect('/users');
 	}
 
 	public function Delete(int $userid)
