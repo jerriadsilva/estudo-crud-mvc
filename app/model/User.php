@@ -3,29 +3,28 @@ namespace app\model;
 
 use \app\core\Db;
 use \app\controller\MessageController;
-use app\core\Base;
-use app\core\Request;
-use app\core\Session;
-use stdClass;
+use \app\core\Base;
+use \app\core\Request;
+use \app\core\Session;
 
 class User
 {
-	private $UserDefault = [
+	private $UserDefaultData = [
 		'name'		=> '',
 		'email'		=> '',
 		'passwd'		=> '',
-		'level'		=> 0,
-		'admin'		=> false
+		'level'		=> 0
 	];
+	private $DB;
+	private $UserData;
+
 	const LevelAdmin	= 1;
 	const TABLE = TBL_PREFIX.'users';
-
-	private $UserData;
 
 	public function __construct(int $userid = 0)
 	{
 		$this->UserData 		= new \stdClass();
-		$this->UserDefault 	= (object) $this->UserDefault;
+		$this->UserDefaultData 	= (object) $this->UserDefaultData;
 		$this->DB 				= new Db(DB_HOST,DB_NAME,DB_USER,DB_PASS);
 
 		if($userid > 0)
@@ -47,23 +46,25 @@ class User
 		$UserList = $DB->SelectSql('SELECT id, name, email, passwd, level FROM '.self::TABLE, 0, $ParamsQuery);
 		foreach($UserList as &$User)
 		{
-			$User->admin = $User->level >= self::LevelAdmin;
+			$User->admin = self::isAdmin($User->level);
 		}
 
 		return $UserList;
 	}
 
-	public function name(){ return $this->UserData->name; }
-	public function email(){ return $this->UserData->email; }
-	public function passwd(){ return $this->UserData->passwd; }
-	public function level(){ return $this->UserData->level; }
-	public function id(){ return $this->UserData->id; }
-	public function admin($Level = null){ return ($Level ?? $this->UserData->level) >= self::LevelAdmin; }
+
+
+	public function name(){ return $this->UserData->name??''; }
+	public function email(){ return $this->UserData->email??''; }
+	public function passwd(){ return $this->UserData->passwd??''; }
+	public function level(){ return $this->UserData->level??''; }
+	public function id(){ return $this->UserData->id??0; }
+	public function admin($Level = null){ return self::isAdmin($Level ?? $this->UserData->level); }
 	public function userdata()
 	{
 		return !empty((array)$this->UserData)
 					? $this->UserData
-					: $this->UserDefault;
+					: $this->UserDefaultData;
 	}
 
 	public static function Logged()
@@ -79,6 +80,10 @@ class User
 
 	public function Find($search, $params = [], $compare = 'OR')
 	{
+		if(isset($this->UserData->id))
+			return $this;
+
+
 		if(is_array($search))
 		{
 			$Params = [];
@@ -100,33 +105,32 @@ class User
 			die('Invalid parameters user search');
 		}
 
-		$User = $this->DB->SelectSql('SELECT * FROM '.self::TABLE.' WHERE '.$Where, 1, $Params);
+		$this->UserData = $this->DB->SelectSql('SELECT * FROM '.self::TABLE.' WHERE '.$Where, 1, $Params);
 
 		if(empty($User))
 		{
 			return false;
 		}
 
-		$this->UserData->id = $User->id;
-		$this->UserData->admin = $User->level >= self::LevelAdmin;
-		//var_dump($this->UserData);die();
-		foreach(array_keys((array)$this->UserDefault) as $Field)
-		{
-			$this->UserData->{$Field} = $User->{$Field};
-		}
+		return $this;
 
-		return $this->UserData;
+		// foreach(array_keys((array)$this->UserDefaultData) as $Field)
+		// {
+		// 	$this->UserData->{$Field} 	= $User->{$Field};
+		// }
+
+		// return $this->UserData;
 	}
 
 	public function Create(array $userData)
 	{
 		if(empty($userData)) return false;
 
-		$this->FillUserData($userData, 'UserDefault');
+		$this->FillUserData($userData, 'UserDefaultData');
 
-		$this->UserDefault->passwd = password_hash($this->UserDefault->passwd, PASSWORD_BCRYPT);
+		$this->UserDefaultData->passwd = password_hash($this->UserDefaultData->passwd, PASSWORD_BCRYPT);
 
-		$Status = $this->DB->Insert(self::TABLE, $this->UserDefault);
+		$Status = $this->DB->Insert(self::TABLE, $this->UserDefaultData);
 
 		if($Status !== false)
 		{
@@ -166,12 +170,17 @@ class User
 		return $Status !== false;
 	}
 
+	private function emptyUser()
+	{
+
+	}
+
 	private function FilterUpdateFields(array $userData)
 	{
 		$TmpFields = [];
 		foreach($userData as $Field => $Value)
 		{
-			if(!isset($this->UserDefault->{$Field})) continue;
+			if(!isset($this->UserDefaultData->{$Field})) continue;
 
 			$TmpFields[$Field] = $Value;
 		}
@@ -187,6 +196,11 @@ class User
 		}
 
 		return $this->{$var};
+	}
+
+	private static function isAdmin(int $Level)
+	{
+		return $Level >= self::LevelAdmin;
 	}
 
 }

@@ -1,9 +1,6 @@
 <?php
 namespace app\core;
 
-use \app\core\Session;
-use \app\model\User;
-
 class Views
 {
 	public static function load(string $view, $Params = [], $PageSubTitle = '', $PageTitle = '')
@@ -27,7 +24,7 @@ class Views
 			${$VariableName} = $VariableValue;
 		}
 
-		$LoggedUser = (new User(Session::Get('userdata')->id??0))->userdata();
+		require BASEDIR.'/app/views.globals.php';
 
 		require $layoutFile;
 

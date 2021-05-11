@@ -7,20 +7,23 @@
 			<li class="nav-item active">
 			<a class="nav-link" href="/">Home</a>
 			</li>
-			<?php if($LoggedUser->admin): ?>
+			<?php if($LoggedUser->admin()): ?>
 			<li class="nav-item">
 				<a class="nav-link" href="/users">Usuarios</a>
 			</li><?php endif; ?>
-			<?php if(!empty($LoggedUser->id)):?>
+			<?php if(!empty($LoggedUser->id())):?>
 			<li class="nav-item dropdown">
-			<a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-				<?=$LoggedUser->name;?>
-			</a>
-			<div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-				<a class="dropdown-item" href="/logout">Logout</a>
-			</div>
-			<?php endif; ?>
+				<a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+					<?=$LoggedUser->name();?>
+				</a>
+				<div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+					<a class="dropdown-item" href="/logout">Logout</a>
+				</div>
 			</li>
+			<?php else: ?>
+			<li class="nav-item active">
+				<a class="nav-link" href="/login">Login</a>
+			</li><?php endif; ?>
 		</ul>
 	</div>
 </nav>

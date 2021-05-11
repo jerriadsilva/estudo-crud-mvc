@@ -13,7 +13,7 @@
 					<label for="passwd" class="form-label mt-4">Password</label>
 					<input type="password" class="form-control" id="passwd" name="passwd" placeholder="Password">
 				</div>
-				<button type="submit" class="btn btn-primary">Submit</button>		
+				<button type="submit" class="btn btn-primary">Submit</button>
 			</fieldset>
 		</form>
 	</div>
