@@ -11,7 +11,7 @@ class Login
 {
 	public function LoginView()
 	{
-		Views::load('main.login.login', null, null, 'Login');
+		Views::load('main.login.login', null, 'Login');
 	}
 
 	public function Logout()

@@ -13,8 +13,9 @@ class UserController extends Controllers
 	{
 		$UserList = User::List();
 
-		Views::load('main.usuarios.listar', ['titulo' => 'Principal', 'UserList' => $UserList], 'Principal');
+		Views::load('main.usuarios.listar', ['UserList' => $UserList], 'Usuários');
 	}
+
 	public function New()
 	{
 		Views::load('main.usuarios.novo', [
