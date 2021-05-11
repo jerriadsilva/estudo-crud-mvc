@@ -3,16 +3,16 @@
 	<div class="card-text" style="padding:0 10px 10px">
 		<form action="<?=$FormAction;?>" method="POST">
 			<div class="form-group">
-				<label for="name">Nome</label>
-				<input type="text" class="form-control" name="name", id="name" placeholder="Nome do produto" value="<?=$Produto->name??'';?>">
+				<label for="nome">Nome</label>
+				<input type="text" class="form-control" name="nome", id="nome" placeholder="Nome do produto" value="<?=$Produto->nome??'';?>">
 			</div>
 			<div class="form-group">
-				<label for="description" class="form-label mt-4">Descrição</label>
-				<textarea class="form-control" id="description" name="description" rows="3" placeholder="Descrição do produto"><?=$Produto->description??'';?></textarea>
+				<label for="descricao" class="form-label mt-4">Descrição</label>
+				<textarea class="form-control" id="descricao" name="descricao" rows="3" placeholder="Descrição do produto"><?=$Produto->descricao??'';?></textarea>
 			</div>
 			<div class="form-group">
-				<label for="price">Valor</label>
-				<input type="text" class="form-control" name="price" id="price" placeholder="$0,00" value="<?=$Produto->price??'';?>">
+				<label for="valor">Valor</label>
+				<input type="text" class="form-control" name="valor" id="valor" placeholder="$0,00" value="<?=$Produto->valor??'';?>">
 			</div>
 			<button type="submit" class="btn btn-primary">Enviar</button>
 		</form>

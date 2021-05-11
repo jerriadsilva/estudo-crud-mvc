@@ -1,9 +1,11 @@
 <?php
 namespace app\core;
 
+use app\controller\Mensagens;
+
 class Controllers
 {
-	private static function ExtractControllerElements($ControllerString)
+	private static function ExtraiElementosController($ControllerString)
 	{
 		if(strpos($ControllerString, '@') > 0)
 		{
@@ -17,10 +19,19 @@ class Controllers
 		return false;
 	}
 
-	public static function CallController($controller, array $PathParams = [])
+	public static function ExecutaController($controller, array $PathParams = [])
 	{
-		$ControllerElements = self::ExtractControllerElements($controller);
+		$ControllerElements = self::ExtraiElementosController($controller);
 		if(!$ControllerElements) return false;
+
+		if(!class_exists($ControllerElements->Controller))
+		{
+			Mensagens::Erro('Não existe o controller "'.$ControllerElements->Controller.'"');
+		}
+		elseif(!method_exists($ControllerElements->Controller, $ControllerElements->Method))
+		{
+			Mensagens::Erro('Não existe o metodo "'.$ControllerElements->Method.'" para o controller "'.$ControllerElements->Controller.'"');
+		}
 
 		call_user_func_array([
 			new $ControllerElements->Controller,

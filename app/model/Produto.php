@@ -2,7 +2,7 @@
 namespace app\model;
 
 use \app\core\Db;
-use \app\controller\MessageController;
+use \app\controller\Mensagens;
 use \app\core\Base;
 use \app\core\Request;
 use \app\core\Models;
@@ -11,24 +11,24 @@ class Produto extends Models
 {
 	protected $DefaultData = [
 		'id'				=> null,
-		'name'			=> '',
-		'description'	=> '',
-		'price'			=> ''
+		'nome'			=> '',
+		'descricao'		=> '',
+		'valor'			=> ''
 	];
 
-	private $ProductData;
+	private $Produto;
 
 	const TABLE = TBL_PREFIX.'produtos';
 
-	public function __construct(int $productid = 0)
+	public function __construct(int $codproduto = 0)
 	{
 		parent::__construct();
-		$this->ProductData 			= new \stdClass();
+		$this->Produto 			= new \stdClass();
 		$this->DefaultData 			= (object) $this->DefaultData;
 
-		if($productid > 0)
+		if($codproduto > 0)
 		{
-			$this->Find($productid);
+			$this->Busca($codproduto);
 		}
 	}
 
@@ -42,102 +42,118 @@ class Produto extends Models
 			$SqlQuery .= ' WHERE '.$CustomWhere[0];
 			$ParamsQuery = $CustomWhere[1];
 		}
-		$ProductList = $DB->SelectSql('SELECT id, name, description, price FROM '.self::TABLE.$SqlQuery, 0, $ParamsQuery);
+		$Produtos = $DB->SelectSql('SELECT id, nome, descricao, valor FROM '.self::TABLE.$SqlQuery, 0, $ParamsQuery);
 
-		return $ProductList ?: [];
+		return $Produtos ?: [];
 	}
 
 	public function Dados()
 	{
-		return !empty((array)$this->ProductData)
-					? $this->ProductData
+		return !empty((array)$this->Produto)
+					? $this->Produto
 					: $this->DefaultData;
 	}
 
-	public function Find($search, $params = [], $compare = 'OR')
+	public function Busca($busca, $params = [], $compare = 'OR')
 	{
-		if(isset($this->ProductData->id))
+		if(isset($this->Produto->id))
 			return $this;
 
-		if(is_array($search))
+		if(is_array($busca))
 		{
 			$Params = [];
 			$Where = [];
-			foreach ($search as $KeySearch => $ValueSearch)
+			foreach ($busca as $KeySearch => $ValueSearch)
 			{
 				$Where[] = $KeySearch.' = ?';
 				$Params[] = $ValueSearch;
 			}
 			$Where = implode(' '.$compare.' ', $Where);
 		}
-		elseif(Base::Numeric($search))
+		elseif(Base::Numeric($busca))
 		{
 			$Where  = 'id = ?';
-			$Params = [$search];
+			$Params = [$busca];
 		}
-		elseif(empty($search) || empty($params))
+		elseif(empty($busca) || empty($params))
 		{
-			die('Invalid parameters user search');
+			Mensagens::Erro('Parâmetros de busca de produto inválida');
 		}
 
-		$Product = $this->DB->SelectSql('SELECT * FROM '.self::TABLE.' WHERE '.$Where, 1, $Params);
+		$Produto = $this->DB->SelectSql('SELECT * FROM '.self::TABLE.' WHERE '.$Where, 1, $Params);
 
-		$Product = $this->FillData((array) $Product);
+		$Produto = $this->PreencheDados((array) $Produto);
 
-		$this->ProductData = $Product;
+		$this->Produto = $Produto;
 
-		return $Product;
+		return $Produto;
 	}
 
-	public function Criar(array $productData)
+	public function Criar(array $dadosProduto)
 	{
-		if(empty($productData)) return false;
+		if(empty($dadosProduto)) return false;
 
-		$productData = $this->FillData($productData);
+		$dadosProduto = $this->PreencheDados($dadosProduto);
 
-		foreach(['name', 'description'] as $Field)
+		foreach(['nome', 'descricao'] as $Coluna)
 		{
-			if(empty($productData->{$Field}))
+			if(empty($dadosProduto->{$Coluna}))
 			{
-				MessageController::Message('Field "'.ucfirst($Field).'" Cannot to be empty.');
+				Mensagens::Erro('Campo "'.ucfirst($Coluna).'" não pode estar vazio.');
 				return false;
 			}
 		}
 
-		$Status = $this->DB->Insert(self::TABLE, $productData);
+		$Status = $this->DB->Insert(self::TABLE, $dadosProduto);
 
 		if($Status !== false)
 		{
-			Request::Redirect('/produtos');
+			Request::Direciona('/produtos');
 		}
 		elseif($this->DB->MysqlError)
 		{
-			MessageController::Message($this->DB->MysqlError);
+			Mensagens::Erro($this->DB->MysqlError);
 		}
 		return false;
 	}
 
-	public function Update(array $productData)
+	public function Update(array $dadosProduto)
 	{
-		if(empty($productData)) return false;
+		if(empty($dadosProduto)) return false;
 
-		$FieldsUpdated = $this->FilterUpdateFields($productData);
+		$ColunasFIltradas = $this->FiltraCamposUpdate($dadosProduto);
 
-		if(empty($FieldsUpdated))
+		if(empty($ColunasFIltradas))
 		{
-			MessageController::Message('Product data to update empty.');
+			Mensagens::Aviso('Sem dados a serem atualizados.');
 			return false;
 		}
 
-		$Status = $this->DB->Update(self::TABLE, $this->ProductData->id, $FieldsUpdated);
+		foreach(['nome', 'descricao'] as $Coluna)
+		{
+			if(empty($ColunasFIltradas[$Coluna]))
+			{
+				Mensagens::Erro('Campo "'.ucfirst($Coluna).'" não pode estar vazio.');
+				return false;
+			}
+		}
 
-		Request::Redirect('/produtos');
+		$Status = $this->DB->Update(self::TABLE, $this->Produto->id, $ColunasFIltradas);
+
+		if($Status !== false)
+		{
+			Request::Direciona('/produtos');
+		}
+		elseif($this->DB->MysqlError)
+		{
+			Mensagens::Erro($this->DB->MysqlError);
+		}
 	}
 
-	public function Delete(int $productid)
+	public function Remover(int $codproduto)
 	{
-		if(empty($this->ProductData)) return false;
-		$Status = $this->DB->CustomQuery('DELETE FROM '.$this->Tabela.' WHERE id = ?', [$productid]);
+		if(empty($this->Produto)) return false;
+		$Status = $this->DB->CustomQuery('DELETE FROM '.$this->Tabela.' WHERE id = ?', [$codproduto]);
 
 		return $Status !== false;
 	}

@@ -2,6 +2,6 @@
 // Load global variables to all views here
 
 use \app\core\Session;
-use \app\model\User;
+use \app\model\Usuario;
 
-$LoggedUser = (new User(Session::Get('userdata')->id??0))->userdata();
+$UsuarioLogado = (new Usuario(Session::Get('userdata')->id??0))->Dados();

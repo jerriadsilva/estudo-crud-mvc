@@ -3,39 +3,39 @@ namespace app\core;
 
 class Views
 {
-	public static function load(string $view, $Params = [], $PageTitle = '')
+	public static function Carrega(string $view, $params = [], $PageTitle = '')
 	{
-		$ViewList = explode('.', $view);
+		$ViewStr = explode('.', $view);
 
-		$LayoutFile = array_shift($ViewList);
-		$viewFile = implode('/', $ViewList);
+		$ArqLayout = array_shift($ViewStr);
+		$Conteudo = implode('/', $ViewStr);
 
-		$layoutFile = NormalizePath(BASEDIR.'app/view/layout/'.$LayoutFile.'.php');
+		$ArqLayout = NormalizePath(BASEDIR.'app/view/layout/'.$ArqLayout.'.php');
 
-		if(!file_exists($layoutFile))
+		if(!file_exists($ArqLayout))
 		{
 			die('Incorrect layout file');
 		}
 
-		if(!empty($viewFile))
+		if(!empty($Conteudo))
 		{
-			$viewFile = NormalizePath(BASEDIR.'app/view/'.$viewFile.'.php');
+			$Conteudo = NormalizePath(BASEDIR.'app/view/'.$Conteudo.'.php');
 
-			if(!file_exists($viewFile))
+			if(!file_exists($Conteudo))
 			{
 				die('Incorrect view file');
 			}
 		}
 
-		$Params = $Params??[];
-		foreach($Params as $VariableName => $VariableValue)
+		$params = $params??[];
+		foreach($params as $VariableName => $VariableValue)
 		{
 			${$VariableName} = $VariableValue;
 		}
 
 		require BASEDIR.'/app/views.globals.php';
 
-		require $layoutFile;
+		require $ArqLayout;
 
 		die();
 	}

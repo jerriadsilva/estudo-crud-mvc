@@ -4,40 +4,38 @@ namespace app\controller;
 use \app\core\Request;
 use \app\core\Session;
 use \app\core\Views;
-use \app\model\User;
-use \app\core\Db;
+use \app\model\Usuario;
 
 class Login
 {
-	public function LoginView()
+	public function index()
 	{
-		Views::load('main.login.login', null, 'Login');
+		Views::Carrega('main.login.login', null, 'Login');
 	}
 
 	public function Logout()
 	{
 		Session::Clear();
-		Request::Redirect('/login');
+		Request::Direciona('/login');
 	}
 
-	public function DoLogin()
+	public function Login()
 	{
-		$DB = new Db(DB_HOST,DB_NAME,DB_USER,DB_PASS);
 		$RequestData = Request::input();
-		$UserData = (new User())->Find(['email' => $RequestData['email']]);;
+		$Usuario = (new Usuario())->Busca(['email' => $RequestData['email']]);
 
-		if(!$UserData)
+		if(!$Usuario)
 		{
-			Request::Redirect('/login/?loginerror=1');
+			Request::Direciona('/login/?loginerror=1');
 		}
-		elseif(!password_verify($RequestData['passwd'], $UserData->passwd))
+		elseif(!password_verify($RequestData['passwd'], $Usuario->passwd))
 		{
-			Request::Redirect('/login/?loginerror=1');
+			Request::Direciona('/login/?loginerror=1');
 		}
 
-		Session::Set('userdata', $UserData);
+		Session::Set('userdata', $Usuario);
 
-		Request::Redirect('/?logged');
+		Request::Direciona('/');
 	}
 
 }

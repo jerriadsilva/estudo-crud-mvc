@@ -4,53 +4,30 @@ use app\core\Views;
 
 \app\core\Session::Start();
 
-//use \app\core\Controllers;
+Routes::get('/', 'Index@index');
 
-//use \app\controller\MainController;
+Routes::get('/produtos', 'Produtos@Lista');
 
-Routes::get('/', 'MainController@index');
+Routes::get('/produto/edit/{id}', 'Produtos@Edita');
+Routes::post('/produto/edit/{id}', 'Produtos@Atualiza');
 
-Routes::get('/produtos', 'ProdutosController@Lista');
+Routes::get('/produto/novo', 'Produtos@Novo');
+Routes::post('/produto/novo', 'Produtos@Insere');
 
-Routes::get('/produto/edit/{id}', 'ProdutosController@Edita');
-Routes::post('/produto/edit/{id}', 'ProdutosController@SalvarEdicao');
+Routes::get('/usuarios', 'Usuarios@Lista');
 
-Routes::get('/produto/novo', 'ProdutosController@Novo');
-Routes::post('/produto/novo', 'ProdutosController@SalvarNovo');
+Routes::get('/usuario/novo', 'Usuarios@Novo');
+Routes::post('/usuario/novo', 'Usuarios@Insere');
 
-Routes::get('/users', 'UserController@List');
-Routes::get('/user/new', 'UserController@New');
-Routes::post('/user/new', 'UserController@SaveNew');
-
-
-Routes::get('/user/edit/{id}', 'UserController@Edit');
-Routes::post('/user/edit/{id}', 'UserController@SaveEdition');
+Routes::get('/usuario/edita/{id}', 'Usuarios@Edita');
+Routes::post('/usuario/edita/{id}', 'Usuarios@Atualiza');
 
 Routes::get('/logout', 'Login@Logout');
-Routes::get('/login', 'Login@LoginView');
+Routes::get('/login', 'Login@Index');
+Routes::post('/login', 'Login@Login');
 
-Routes::post('/login', 'Login@DoLogin');
 
+// Carrega a view da página de erro caso não encontre nenhuma das rotas para qualquer tipo de requisição, e qualquer rota recebida
 Routes::all('*', function(){
-	Views::load('error_404');
+	Views::Carrega('error_404');
 });
-
-
-// Routes::get('/', function(){
-// 	echo 'Route Mains page';
-// });
-
-// Routes::get('/novo/', function(){
-// 	echo 'Route New';
-// });
-
-// Routes::get('/novo/{id}/', function($Params, $QueryParams){
-// 	echo 'Route new passing param value in path';
-// 	var_dump($Params, $QueryParams);
-// });
-
-
-// Routes::get('/novo/{id}/', function($Params, $QueryParams){
-// 	echo 'Route new passing param value in path';
-// 	var_dump($Params, $QueryParams);
-// });

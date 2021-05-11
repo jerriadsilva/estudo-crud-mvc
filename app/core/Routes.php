@@ -1,7 +1,7 @@
 <?php
 namespace app\core;
 
-use app\controller\MessageController;
+use app\controller\Mensagens;
 use \app\core\Controllers;
 use \app\core\Request;
 
@@ -75,7 +75,7 @@ class Routes
 		{
 			if(is_string($controllerOrCallback))
 			{
-				Controllers::CallController($controllerOrCallback, self::$ParamsOnPath, self::$QueryParams);
+				Controllers::ExecutaController($controllerOrCallback, self::$ParamsOnPath, self::$QueryParams);
 			}
 			elseif(is_callable($controllerOrCallback))
 			{

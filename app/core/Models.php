@@ -8,25 +8,26 @@ class Models
 	{
 		$this->DB = new Db(DB_HOST,DB_NAME,DB_USER,DB_PASS);
 	}
-	protected function FilterUpdateFields(array $Data)
+	protected function FiltraCamposUpdate(array $Data)
 	{
-		$TmpFields = [];
-		foreach($Data as $Field => $Value)
+		$ColunasTmp = [];
+		foreach($Data as $Coluna => $Valor)
 		{
-			if(!isset($this->DefaultData->{$Field})) continue;
+			if(!isset($this->DefaultData->{$Coluna})) continue;
 
-			$TmpFields[$Field] = $Value;
+			$ColunasTmp[$Coluna] = $Valor;
 		}
-		return $TmpFields;
+		return $ColunasTmp;
 	}
 
-	protected function FillData(array $Data)
+	protected function PreencheDados(array $Dados)
 	{
-		$DataFilled = [];
-		foreach($this->DefaultData as $FieldName => $Value)
+		$DadosRetorno = [];
+		foreach($this->DefaultData as $Coluna => $Valor)
 		{
-			$DataFilled[$FieldName] = $Data[$FieldName] ?? $Value;
+			$DadosRetorno[$Coluna] = $Dados[$Coluna] ?? $Valor;
 		}
-		return (object) $DataFilled;
+		return (object) $DadosRetorno;
 	}
+
 }

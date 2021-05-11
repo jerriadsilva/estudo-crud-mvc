@@ -7,7 +7,7 @@
 			<p class="card-text"><?=$Produto->description;?></p>
 		</div>
 		<h6 class="d-block text-right pr-3">R$<?=$Produto->price;?></h6>
-	<?php if($LoggedUser->id): ?>
+	<?php if($UsuarioLogado->id): ?>
 		<button class="btn btn-lg btn-primary" type="button">Comprar</button><?php endif; ?>
 	</div>
 <?php endforeach;?>

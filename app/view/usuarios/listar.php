@@ -5,20 +5,20 @@
 			<thead class="thead-dark">
 				<tr>
 					<th scope="col">#</th>
-					<th scope="col">Name</th>
+					<th scope="col">Nome</th>
 					<th scope="col">Email</th>
 					<th scope="col">Admin</th>
-					<th scope="col"><a href="/user/new">Add</a></th>
+					<th scope="col"><a href="/usuario/novo">Cadastrar</a></th>
 				</tr>
 			</thead>
 			<tbody>
-				<?php foreach ($UserList as $User): ?>
+				<?php foreach ($Usuarios as $Usuario): ?>
 				<tr>
-					<th scope="row"><?=$User->id;?></th>
-					<td><?=$User->name;?></td>
-					<td><?=$User->email;?></td>
-					<td><?=$User->admin;?></td>
-					<td><a href="/user/edit/<?=$User->id;?>">Editar</a></td>
+					<th scope="row"><?=$Usuario->id;?></th>
+					<td><?=$Usuario->nome;?></td>
+					<td><?=$Usuario->email;?></td>
+					<td><?=$Usuario->admin;?></td>
+					<td><a href="/usuario/edita/<?=$Usuario->id;?>">Editar</a></td>
 				</tr>
 				<?php endforeach; ?>
 			</tbody>

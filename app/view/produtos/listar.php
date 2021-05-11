@@ -15,9 +15,9 @@
 				<?php foreach ($Produtos as $Produto): ?>
 				<tr>
 					<th scope="row"><?=$Produto->id;?></th>
-					<td><?=$Produto->name;?></td>
-					<td><?=$Produto->description;?></td>
-					<td><?=$Produto->price;?></td>
+					<td><?=$Produto->nome;?></td>
+					<td><?=$Produto->descricao;?></td>
+					<td><?=$Produto->valor;?></td>
 					<td><a href="/produto/edit/<?=$Produto->id;?>">Editar</a></td>
 				</tr>
 				<?php endforeach; ?>

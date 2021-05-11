@@ -8,7 +8,7 @@ class Request
 		return strtoupper($_SERVER['REQUEST_METHOD']);
 	}
 
-	public static function Redirect($Uri)
+	public static function Direciona($Uri)
 	{
 		header('Location: '.$Uri);
 		die();
@@ -42,7 +42,7 @@ class Request
 	public static function PostParams()
 	{
 		return $_POST;
-	}	
+	}
 
 	public static function get()
 	{

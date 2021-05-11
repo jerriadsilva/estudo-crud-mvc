@@ -14,7 +14,7 @@
 <body>
 <?php include(__DIR__.'/navbar-guest.php') ?>
 <div role="main" class="justify-content-center">
-	<?php include($viewFile) ?>
+	<?php include($Conteudo) ?>
 </div>
 </body>
 </html>

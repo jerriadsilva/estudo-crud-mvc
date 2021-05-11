@@ -5,11 +5,11 @@ use \app\core\Views;
 use \app\model\Produto;
 
 
-class MainController
+class Index
 {
 	public function index()
 	{
 		$Produtos = Produto::Lista();
-		Views::load('main.principal', ['Produtos' => $Produtos]);
+		Views::Carrega('main.principal', ['Produtos' => $Produtos]);
 	}
 }
