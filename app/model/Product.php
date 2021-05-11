@@ -7,7 +7,7 @@ use \app\core\Base;
 use \app\core\Request;
 use \app\core\Models;
 
-class Product extends Models
+class Produtos extends Models
 {
 	protected $DefaultData = [
 		'id'			=> null,
@@ -31,7 +31,7 @@ class Product extends Models
 		}
 	}
 
-	public static function List(array $CustomWhere = [])
+	public static function Lista(array $CustomWhere = [])
 	{
 		$DB = new Db(DB_HOST,DB_NAME,DB_USER,DB_PASS);
 		$SqlQuery = '';
@@ -47,7 +47,7 @@ class Product extends Models
 		return $ProductList ?: [];
 	}
 
-	public function productdata()
+	public function Dados()
 	{
 		return !empty((array)$this->ProductData)
 					? $this->ProductData
@@ -89,7 +89,7 @@ class Product extends Models
 		return $Product;
 	}
 
-	public function Create(array $productData)
+	public function Criar(array $productData)
 	{
 		if(empty($productData)) return false;
 
