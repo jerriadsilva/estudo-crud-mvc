@@ -75,6 +75,14 @@ class User
 		return true;
 	}
 
+	public static function RequireLogin()
+	{
+		if(!self::Logged())
+		{
+			Request::Redirect('/login');
+		}
+	}
+
 	public function Find($search, $params = [], $compare = 'OR')
 	{
 		if(isset($this->UserData->id))

@@ -1,16 +1,16 @@
 <?php
 namespace app\controller;
 
-use \app\core\Controllers;
 use \app\core\Views;
 use \app\model\User;
 use \app\controller\MessageController;
 use \app\core\Request;
 
-class UserController extends Controllers
+class UserController
 {
 	public function List()
 	{
+		User::RequireLogin();
 		$UserList = User::List();
 
 		Views::load('main.usuarios.listar', ['UserList' => $UserList], 'Usuários');
@@ -18,6 +18,7 @@ class UserController extends Controllers
 
 	public function New()
 	{
+		User::RequireLogin();
 		Views::load('main.usuarios.novo', [
 			'titulo' => 'Novo usuário',
 			'User' => (new User())->userdata(),
@@ -27,6 +28,7 @@ class UserController extends Controllers
 
 	public function Edit(int $userid = 0)
 	{
+		User::RequireLogin();
 		$User = new User($userid);
 		if(!$User->id())
 		{
@@ -43,6 +45,7 @@ class UserController extends Controllers
 
 	public function SaveNew()
 	{
+		User::RequireLogin();
 		$User = new User();
 		$Status = $User->Create(Request::Input());
 		if($Status)
@@ -58,6 +61,7 @@ class UserController extends Controllers
 
 	public function SaveEdition(int $userid)
 	{
+		User::RequireLogin();
 		$User = new User($userid);
 		if(!$User->id())
 		{

@@ -1,12 +1,11 @@
 <?php
 namespace app\controller;
 
-use \app\core\Controllers;
 use \app\core\Session;
 use \app\core\Views;
 use \app\model\User;
 
-class MainController extends Controllers
+class MainController
 {
 	public function index()
 	{
