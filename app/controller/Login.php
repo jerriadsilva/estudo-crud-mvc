@@ -24,14 +24,13 @@ class Login
 	{
 		$DB = new Db(DB_HOST,DB_NAME,DB_USER,DB_PASS);
 		$RequestData = Request::input();
-		$User = new User();
-		$UserData = $User->Find(['email' => $RequestData['email']]);
+		$UserData = (new User())->Find(['email' => $RequestData['email']]);;
 
 		if(!$UserData)
 		{
 			Request::Redirect('/login/?loginerror=1');
 		}
-		elseif(!password_verify($RequestData['passwd'], $User->passwd()))
+		elseif(!password_verify($RequestData['passwd'], $UserData->passwd))
 		{
 			Request::Redirect('/login/?loginerror=1');
 		}
