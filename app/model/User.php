@@ -10,10 +10,11 @@ use \app\core\Session;
 class User
 {
 	private $UserDefaultData = [
+		'id'			=> null,
 		'name'		=> '',
 		'email'		=> '',
 		'passwd'		=> '',
-		'level'		=> 0
+		'admin'		=> false
 	];
 	private $DB;
 	private $UserData;
@@ -43,13 +44,10 @@ class User
 			$SqlQuery .= ' WHERE '.$CustomWhere[0];
 			$ParamsQuery = $CustomWhere[1];
 		}
-		$UserList = $DB->SelectSql('SELECT id, name, email, passwd, level FROM '.self::TABLE, 0, $ParamsQuery);
-		foreach($UserList as &$User)
-		{
-			$User->admin = self::isAdmin($User->level);
-		}
 
-		return $UserList;
+		$UserList = $DB->SelectSql('SELECT id, name, email, passwd, admin FROM '.self::TABLE, 0, $ParamsQuery);
+
+		return $UserList ?: [];
 	}
 
 
@@ -57,9 +55,8 @@ class User
 	public function name(){ return $this->UserData->name??''; }
 	public function email(){ return $this->UserData->email??''; }
 	public function passwd(){ return $this->UserData->passwd??''; }
-	public function level(){ return $this->UserData->level??''; }
 	public function id(){ return $this->UserData->id??0; }
-	public function admin($Level = null){ return self::isAdmin($Level ?? $this->UserData->level); }
+	public function admin(){ return $this->UserData->admin??false; }
 	public function userdata()
 	{
 		return !empty((array)$this->UserData)
@@ -83,7 +80,6 @@ class User
 		if(isset($this->UserData->id))
 			return $this;
 
-
 		if(is_array($search))
 		{
 			$Params = [];
@@ -105,28 +101,29 @@ class User
 			die('Invalid parameters user search');
 		}
 
-		$this->UserData = $this->DB->SelectSql('SELECT * FROM '.self::TABLE.' WHERE '.$Where, 1, $Params);
+		$User = $this->DB->SelectSql('SELECT * FROM '.self::TABLE.' WHERE '.$Where, 1, $Params);
 
-		if(empty($User))
-		{
-			return false;
-		}
+		$User = $this->FillUserData($User);
 
-		return $this;
+		$this->UserData = $User;
 
-		// foreach(array_keys((array)$this->UserDefaultData) as $Field)
-		// {
-		// 	$this->UserData->{$Field} 	= $User->{$Field};
-		// }
-
-		// return $this->UserData;
+		return $User;
 	}
 
 	public function Create(array $userData)
 	{
 		if(empty($userData)) return false;
 
-		$this->FillUserData($userData, 'UserDefaultData');
+		$userData = $this->FillUserData($userData);
+
+		foreach(['name', 'email', 'passwd'] as $Field)
+		{
+			if(empty($userData->{$Field}))
+			{
+				MessageController::Message('Field "'.ucfirst($Field).'" Cannot to be empty.');
+				return false;
+			}
+		}
 
 		$this->UserDefaultData->passwd = password_hash($this->UserDefaultData->passwd, PASSWORD_BCRYPT);
 
@@ -154,7 +151,7 @@ class User
 
 		if(!empty($FieldsUpdated['passwd']))
 		{
-			$FieldsUpdated['passwd'] = password_hash($FieldsUpdated['passwd'], PASSWORD_BCRYPT);
+			$FieldsUpdated['passwd'] = self::PasswdHash($FieldsUpdated['passwd']);
 		}
 
 		$Status = $this->DB->Update(self::TABLE, $this->UserData->id, $FieldsUpdated);
@@ -170,9 +167,9 @@ class User
 		return $Status !== false;
 	}
 
-	private function emptyUser()
+	private static function PasswdHash($passwd)
 	{
-
+		return password_hash($passwd, PASSWORD_BCRYPT);
 	}
 
 	private function FilterUpdateFields(array $userData)
@@ -187,20 +184,13 @@ class User
 		return $TmpFields;
 	}
 
-	private function FillUserData(array $userData, string $var = 'UserData')
+	private function FillUserData($userData)
 	{
-		foreach($this->{$var} as $Field => $Value)
+		$DataFilled = [];
+		foreach($this->UserDefaultData as $FieldName => $Value)
 		{
-			if(!isset($userData[$Field])) continue;
-			$this->{$var}->{$Field} = $userData[$Field];
+			$DataFilled[$FieldName] = $userData->{$FieldName} ?? $Value;
 		}
-
-		return $this->{$var};
+		return (object) $DataFilled;
 	}
-
-	private static function isAdmin(int $Level)
-	{
-		return $Level >= self::LevelAdmin;
-	}
-
 }
