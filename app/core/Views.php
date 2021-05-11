@@ -3,7 +3,7 @@ namespace app\core;
 
 class Views
 {
-	public static function load(string $view, $Params = [], $PageSubTitle = '', $PageTitle = '')
+	public static function load(string $view, $Params = [], $PageTitle = '')
 	{
 		$ViewList = explode('.', $view);
 
@@ -11,11 +11,20 @@ class Views
 		$viewFile = implode('/', $ViewList);
 
 		$layoutFile = NormalizePath(BASEDIR.'app/view/layout/'.$LayoutFile.'.php');
-		$viewFile = NormalizePath(BASEDIR.'app/view/'.$viewFile.'.php');
 
-		if(!file_exists($viewFile) || !file_exists($layoutFile))
+		if(!file_exists($layoutFile))
 		{
-			die('Incorrect layout or view file');
+			die('Incorrect layout file');
+		}
+
+		if(!empty($viewFile))
+		{
+			$viewFile = NormalizePath(BASEDIR.'app/view/'.$viewFile.'.php');
+
+			if(!file_exists($viewFile))
+			{
+				die('Incorrect view file');
+			}
 		}
 
 		$Params = $Params??[];
