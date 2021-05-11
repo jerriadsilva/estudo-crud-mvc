@@ -20,12 +20,12 @@ class Models
 		return $TmpFields;
 	}
 
-	protected function FillData($Data)
+	protected function FillData(array $Data)
 	{
 		$DataFilled = [];
 		foreach($this->DefaultData as $FieldName => $Value)
 		{
-			$DataFilled[$FieldName] = $Data->{$FieldName} ?? $Value;
+			$DataFilled[$FieldName] = $Data[$FieldName] ?? $Value;
 		}
 		return (object) $DataFilled;
 	}

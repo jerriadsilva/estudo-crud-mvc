@@ -69,11 +69,18 @@ class User extends Models
 		return true;
 	}
 
-	public static function RequireLogin()
+	public static function RequireLogin(bool $OnlyAdmin = true)
 	{
 		if(!self::Logged())
 		{
 			Request::Redirect('/login');
+		}
+		elseif($OnlyAdmin)
+		{
+			if(!Session::Get('userdata')->admin)
+			{
+				Request::Redirect('/');
+			}
 		}
 	}
 
@@ -105,7 +112,7 @@ class User extends Models
 
 		$User = $this->DB->SelectSql('SELECT * FROM '.self::TABLE.' WHERE '.$Where, 1, $Params);
 
-		$User = $this->FillData($User);
+		$User = $this->FillData((array)$User);
 
 		$this->UserData = $User;
 

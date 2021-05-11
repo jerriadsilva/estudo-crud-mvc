@@ -341,7 +341,10 @@ class Db {
 
 		$ValueMask = implode(',', array_fill(0, count($Data), '?'));
 
-		$FieldArray = implode(',', array_keys($Data));
+		$FieldArray = array_keys($Data);
+		array_walk($FieldArray, function(&$value){ $value = '`'.$value.'`'; });
+		$FieldArray = implode(', ', $FieldArray);
+
 
 		$strQuery = 'INSERT '.($Ignore ? 'IGNORE' : '').' INTO '.$Table. ' ('.$FieldArray.') VALUES('.$ValueMask.')';
 
@@ -354,7 +357,7 @@ class Db {
 				$strQuery .= ' ON DUPLICATE KEY UPDATE ';
 				foreach($DuplicateKeyStatementData as $DuplicateFieldName => $DuplicateFieldValue)
 				{
-					$strQuery .= $DuplicateFieldName . ' = ?';
+					$strQuery .= '`'.$DuplicateFieldName.'`' . ' = ?';
 					$Params[] = $DuplicateFieldValue;
 				}
 			}
@@ -369,6 +372,8 @@ class Db {
 			var_dump($this->ParseSql($strQuery, $Params));
 			return;
 		}
+
+		//var_dump($strQuery, $Params);die();
 
 		$Status = $this->PrepareAndExecuteQuery($strQuery, $Params);
 
@@ -391,7 +396,7 @@ class Db {
 
 		foreach($Data as $DataFieldName => $DataFieldValue)
 		{
-			$queryValues[] = $DataFieldName . ' = ?';
+			$queryValues[] = '`'.$DataFieldName.'`' . ' = ?';
 			$Params[] = $DataFieldValue;
 		}
 

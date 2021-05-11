@@ -10,6 +10,14 @@ use app\core\Views;
 
 Routes::get('/', 'MainController@index');
 
+Routes::get('/produtos', 'ProdutosController@Lista');
+
+Routes::get('/produto/edit/{id}', 'ProdutosController@Edita');
+Routes::post('/produto/edit/{id}', 'ProdutosController@SalvarEdicao');
+
+Routes::get('/produto/novo', 'ProdutosController@Novo');
+Routes::post('/produto/novo', 'ProdutosController@SalvarNovo');
+
 Routes::get('/users', 'UserController@List');
 Routes::get('/user/new', 'UserController@New');
 Routes::post('/user/new', 'UserController@SaveNew');

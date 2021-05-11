@@ -3,6 +3,28 @@
 	border-width: 0;
 }
 
+.card.product {
+    display: inline-block;
+    margin: 0 0.5rem 1rem;
+}
+
+.text-right {
+    text-align: right;
+}
+
+.text-left {
+    text-align: left;
+}
+
+.table .thead-dark th {
+    background-color: #20374c;
+}
+
+.btn-lg {
+    width: 100%;
+}
+
+
 
 
 

@@ -2,7 +2,7 @@
 namespace app\controller;
 
 use \app\core\Views;
-use \app\model\Produtos;
+use \app\model\Produto;
 use \app\model\User;
 use \app\controller\MessageController;
 use \app\core\Request;
@@ -12,9 +12,9 @@ class ProdutosController
 	public function Lista()
 	{
 		User::RequireLogin();
-		$Produtos = Produtos::Lista();
+		$Produtos = Produto::Lista();
 
-		Views::load('main.usuarios.listar', ['Produtos' => $Produtos], 'Produtos');
+		Views::load('main.produtos.listar', ['Produtos' => $Produtos], 'Produtos');
 	}
 
 	public function Novo()
@@ -22,8 +22,8 @@ class ProdutosController
 		User::RequireLogin();
 
 		Views::load('main.produtos.novo', [
-			'titulo' => 'Novo usuário',
-			'Produto' => (new Produtos())->Dados(),
+			'titulo' => 'Cadastrar Produto',
+			'Produto' => (new Produto())->Dados(),
 			'FormAction' => '/produto/novo'
 		], 'Cadastrar Produto');
 	}
@@ -38,22 +38,21 @@ class ProdutosController
 			return;
 		}
 
-		Views::load('main.usuarios.novo', [
+		Views::load('main.produtos.novo', [
 			'titulo' => 'Editar produto',
-			'User' =>$Produto,
-			'FormAction' => '/user/edit/'.$Produto->id
-		]);
+			'Produto' =>$Produto,
+			'FormAction' => '/produto/edit/'.$Produto->id
+		], 'Editar produto');
 	}
 
-	public function SalvaNovo()
+	public function SalvarNovo()
 	{
 		User::RequireLogin();
-
 		$Produto = new Produto();
 		$Status = $Produto->Criar(Request::Input());
 		if($Status)
 		{
-			Request::Redirect('/');
+			Request::Redirect('/produtos');
 		}
 		else
 		{
@@ -66,8 +65,8 @@ class ProdutosController
 	{
 		User::RequireLogin();
 
-		$Produto = (new Produto($idproduto))->Dados();
-		if(!$Produto->id)
+		$Produto = new Produto($idproduto);
+		if(!$Produto->Dados()->id)
 		{
 			MessageController::Message('Produto não encontrado.');
 			return;

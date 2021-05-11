@@ -7,21 +7,22 @@ use \app\core\Base;
 use \app\core\Request;
 use \app\core\Models;
 
-class Produtos extends Models
+class Produto extends Models
 {
 	protected $DefaultData = [
-		'id'			=> null,
-		'name'		=> '',
-		'desc'		=> '',
-		'price'		=> ''
+		'id'				=> null,
+		'name'			=> '',
+		'description'	=> '',
+		'price'			=> ''
 	];
 
 	private $ProductData;
 
-	const TABLE = TBL_PREFIX.'products';
+	const TABLE = TBL_PREFIX.'produtos';
 
 	public function __construct(int $productid = 0)
 	{
+		parent::__construct();
 		$this->ProductData 			= new \stdClass();
 		$this->DefaultData 			= (object) $this->DefaultData;
 
@@ -41,8 +42,7 @@ class Produtos extends Models
 			$SqlQuery .= ' WHERE '.$CustomWhere[0];
 			$ParamsQuery = $CustomWhere[1];
 		}
-
-		$ProductList = $DB->SelectSql('SELECT id, name, email, passwd, admin FROM '.self::TABLE, 0, $ParamsQuery);
+		$ProductList = $DB->SelectSql('SELECT id, name, description, price FROM '.self::TABLE.$SqlQuery, 0, $ParamsQuery);
 
 		return $ProductList ?: [];
 	}
@@ -82,7 +82,7 @@ class Produtos extends Models
 
 		$Product = $this->DB->SelectSql('SELECT * FROM '.self::TABLE.' WHERE '.$Where, 1, $Params);
 
-		$Product = $this->FillData($Product);
+		$Product = $this->FillData((array) $Product);
 
 		$this->ProductData = $Product;
 
@@ -95,7 +95,7 @@ class Produtos extends Models
 
 		$productData = $this->FillData($productData);
 
-		foreach(['name', 'desc'] as $Field)
+		foreach(['name', 'description'] as $Field)
 		{
 			if(empty($productData->{$Field}))
 			{
@@ -108,7 +108,11 @@ class Produtos extends Models
 
 		if($Status !== false)
 		{
-			Request::Redirect('/products');
+			Request::Redirect('/produtos');
+		}
+		elseif($this->DB->MysqlError)
+		{
+			MessageController::Message($this->DB->MysqlError);
 		}
 		return false;
 	}
@@ -127,7 +131,7 @@ class Produtos extends Models
 
 		$Status = $this->DB->Update(self::TABLE, $this->ProductData->id, $FieldsUpdated);
 
-		Request::Redirect('/products');
+		Request::Redirect('/produtos');
 	}
 
 	public function Delete(int $productid)

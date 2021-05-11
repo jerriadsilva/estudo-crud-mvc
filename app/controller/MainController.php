@@ -1,15 +1,15 @@
 <?php
 namespace app\controller;
 
-use \app\core\Session;
 use \app\core\Views;
-use \app\model\User;
+use \app\model\Produto;
+
 
 class MainController
 {
 	public function index()
 	{
-		$LoggedUser = (new User(Session::Get('userdata')->id??0))->userdata();
-		Views::load('main.principal', ['LoggedUser' => $LoggedUser]);
+		$Produtos = Produto::Lista();
+		Views::load('main.principal', ['Produtos' => $Produtos]);
 	}
 }

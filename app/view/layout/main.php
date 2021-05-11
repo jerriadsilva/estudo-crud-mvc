@@ -7,12 +7,13 @@
 	<title><?=SITE_NAME.(!empty($PageTitle) ? ' - '.$PageTitle : '');?></title>
 	<script src="/js/jquery-3.5.1.slim.min.js"></script>
 	<script src="/js/bootstrap-4.6.js"></script>
+	<!-- <link rel="stylesheet" href="/css/bootstrap-4.6.css"> -->
 	<link rel="stylesheet" href="/css/bootstrap.min.css">
 	<link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
 <?php include(__DIR__.'/navbar-guest.php') ?>
-<div role="main" class="container">
+<div role="main" class="justify-content-center">
 	<?php include($viewFile) ?>
 </div>
 </body>

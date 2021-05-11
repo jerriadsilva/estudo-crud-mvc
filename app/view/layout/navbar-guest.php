@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-3">
 	<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
 		<span class="navbar-toggler-icon"></span>
 	</button>
@@ -10,6 +10,9 @@
 			<?php if($LoggedUser->admin): ?>
 			<li class="nav-item">
 				<a class="nav-link" href="/users">Usuarios</a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link" href="/produtos">Produtos</a>
 			</li><?php endif; ?>
 			<?php if(!empty($LoggedUser->id)):?>
 			<li class="nav-item dropdown">
