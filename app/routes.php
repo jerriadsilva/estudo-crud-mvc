@@ -1,5 +1,6 @@
 <?php
 use \app\core\Routes;
+use app\core\Views;
 
 \app\core\Session::Start();
 
@@ -21,6 +22,10 @@ Routes::get('/logout', 'Login@Logout');
 Routes::get('/login', 'Login@LoginView');
 
 Routes::post('/login', 'Login@DoLogin');
+
+Routes::all('*', function(){
+	Views::load('error_404');
+});
 
 
 // Routes::get('/', function(){

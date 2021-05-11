@@ -1,6 +1,7 @@
 <?php
 namespace app\core;
 
+use app\controller\MessageController;
 use \app\core\Controllers;
 use \app\core\Request;
 
@@ -67,9 +68,10 @@ class Routes
 
 	private static function ExecuteRoute($path, $controllerOrCallback)
 	{
-		$path = self::NormalizaPath(strtolower($path));
+		if($path !== '*')
+			$path = self::NormalizaPath(strtolower($path));
 
-		if(self::PathInUriRequest($path))
+		if($path === '*' || self::PathInUriRequest($path))
 		{
 			if(is_string($controllerOrCallback))
 			{
@@ -97,6 +99,11 @@ class Routes
 	{
 		if(!Request::post()) return;
 
+		self::ExecuteRoute($path, $controllerOrCallback);
+	}
+
+	public static function all($path, $controllerOrCallback)
+	{
 		self::ExecuteRoute($path, $controllerOrCallback);
 	}
 }
