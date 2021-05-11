@@ -6,17 +6,18 @@ use \app\controller\MessageController;
 use \app\core\Base;
 use \app\core\Request;
 use \app\core\Session;
+use \app\core\Models;
 
-class User
+class User extends Models
 {
-	private $UserDefaultData = [
+	protected $DefaultData = [
 		'id'			=> null,
 		'name'		=> '',
 		'email'		=> '',
 		'passwd'		=> '',
 		'admin'		=> false
 	];
-	private $DB;
+
 	private $UserData;
 
 	const LevelAdmin	= 1;
@@ -24,9 +25,9 @@ class User
 
 	public function __construct(int $userid = 0)
 	{
+		parent::__construct();
 		$this->UserData 		= new \stdClass();
-		$this->UserDefaultData 	= (object) $this->UserDefaultData;
-		$this->DB 				= new Db(DB_HOST,DB_NAME,DB_USER,DB_PASS);
+		$this->DefaultData 	= (object) $this->DefaultData;
 
 		if($userid > 0)
 		{
@@ -50,18 +51,11 @@ class User
 		return $UserList ?: [];
 	}
 
-
-
-	public function name(){ return $this->UserData->name??''; }
-	public function email(){ return $this->UserData->email??''; }
-	public function passwd(){ return $this->UserData->passwd??''; }
-	public function id(){ return $this->UserData->id??0; }
-	public function admin(){ return $this->UserData->admin??false; }
 	public function userdata()
 	{
 		return !empty((array)$this->UserData)
 					? $this->UserData
-					: $this->UserDefaultData;
+					: $this->DefaultData;
 	}
 
 	public static function Logged()
@@ -111,7 +105,7 @@ class User
 
 		$User = $this->DB->SelectSql('SELECT * FROM '.self::TABLE.' WHERE '.$Where, 1, $Params);
 
-		$User = $this->FillUserData($User);
+		$User = $this->FillData($User);
 
 		$this->UserData = $User;
 
@@ -122,7 +116,7 @@ class User
 	{
 		if(empty($userData)) return false;
 
-		$userData = $this->FillUserData($userData);
+		$userData = $this->FillData($userData);
 
 		foreach(['name', 'email', 'passwd'] as $Field)
 		{
@@ -133,13 +127,12 @@ class User
 			}
 		}
 
-		$this->UserDefaultData->passwd = password_hash($this->UserDefaultData->passwd, PASSWORD_BCRYPT);
+		$userData->passwd = self::PasswdHash($userData->passwd);
 
-		$Status = $this->DB->Insert(self::TABLE, $this->UserDefaultData);
+		$Status = $this->DB->Insert(self::TABLE, $userData);
 
 		if($Status !== false)
 		{
-			$this->Find($this->DB->InsertId);
 			Request::Redirect('/users');
 		}
 		return false;
@@ -178,27 +171,5 @@ class User
 	private static function PasswdHash($passwd)
 	{
 		return password_hash($passwd, PASSWORD_BCRYPT);
-	}
-
-	private function FilterUpdateFields(array $userData)
-	{
-		$TmpFields = [];
-		foreach($userData as $Field => $Value)
-		{
-			if(!isset($this->UserDefaultData->{$Field})) continue;
-
-			$TmpFields[$Field] = $Value;
-		}
-		return $TmpFields;
-	}
-
-	private function FillUserData($userData)
-	{
-		$DataFilled = [];
-		foreach($this->UserDefaultData as $FieldName => $Value)
-		{
-			$DataFilled[$FieldName] = $userData->{$FieldName} ?? $Value;
-		}
-		return (object) $DataFilled;
 	}
 }

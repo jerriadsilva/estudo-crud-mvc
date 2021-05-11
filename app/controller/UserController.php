@@ -23,14 +23,14 @@ class UserController
 			'titulo' => 'Novo usuário',
 			'User' => (new User())->userdata(),
 			'FormAction' => '/user/new'
-		]);
+		], 'Novo usuário');
 	}
 
 	public function Edit(int $userid = 0)
 	{
 		User::RequireLogin();
-		$User = new User($userid);
-		if(!$User->id())
+		$User = (new User($userid))->userdata();
+		if(!$User->id)
 		{
 			MessageController::Message('User not found.');
 			return;
@@ -38,8 +38,8 @@ class UserController
 
 		Views::load('main.usuarios.novo', [
 			'titulo' => 'Editar usuário',
-			'User' => $User->userdata(),
-			'FormAction' => '/user/edit/'.$User->id()
+			'User' =>$User,
+			'FormAction' => '/user/edit/'.$User->id
 		]);
 	}
 
@@ -62,8 +62,8 @@ class UserController
 	public function SaveEdition(int $userid)
 	{
 		User::RequireLogin();
-		$User = new User($userid);
-		if(!$User->id())
+		$User = (new User($userid))->userdata();
+		if(!$User->id)
 		{
 			MessageController::Message('User not found.');
 			return;
