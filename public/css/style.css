@@ -24,6 +24,11 @@
     width: 100%;
 }
 
+div.form-group
+{
+    padding-top: 10px;
+}
+
 
 
 

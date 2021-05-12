@@ -18,10 +18,10 @@ class Request
 	{
 		$Method = self::RequestMethod();
 		return (object) [
-			'get'		=> $Method === 'GET',
+			'get'			=> $Method === 'GET',
 			'post'		=> $Method === 'POST',
-			'put'		=> $Method === 'PUT',
-			'delete'	=> $Method === 'DELETE',
+			'put'			=> $Method === 'PUT',
+			'delete'		=> $Method === 'DELETE',
 		];
 	}
 

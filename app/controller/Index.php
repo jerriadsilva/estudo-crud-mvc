@@ -10,6 +10,6 @@ class Index
 	public function index()
 	{
 		$Produtos = Produto::Lista();
-		Views::Carrega('main.principal', ['Produtos' => $Produtos]);
+		Views::Carrega('main:principal', ['Produtos' => $Produtos]);
 	}
 }

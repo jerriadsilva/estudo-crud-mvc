@@ -13,14 +13,14 @@ class Usuarios
 		Usuario::RequerLogin();
 		$Usuarios = Usuario::Lista();
 
-		Views::Carrega('main.usuarios.listar', ['Usuarios' => $Usuarios], 'Usuários');
+		Views::Carrega('main:usuarios.listar', ['Usuarios' => $Usuarios], 'Usuários');
 	}
 
 	public function Novo()
 	{
 		Usuario::RequerLogin();
 
-		Views::Carrega('main.usuarios.novo', [
+		Views::Carrega('main:usuarios.novo', [
 			'titulo' => 'Novo usuário',
 			'Usuario' => (new Usuario())->Dados(),
 			'FormAction' => '/usuario/novo'
@@ -39,7 +39,7 @@ class Usuarios
 			return;
 		}
 
-		Views::Carrega('main.usuarios.novo', [
+		Views::Carrega('main:usuarios.novo', [
 			'titulo' 		=> 'Editar usuário',
 			'Usuario' 		=> $Usuario,
 			'FormAction' 	=> '/usuario/edita/'.$Usuario->id

@@ -6,25 +6,29 @@ use app\core\Views;
 
 Routes::get('/', 'Index@index');
 
-Routes::get('/produtos', 'Produtos@Lista');
-
-Routes::get('/produto/edit/{id}', 'Produtos@Edita');
-Routes::post('/produto/edit/{id}', 'Produtos@Atualiza');
-
-Routes::get('/produto/novo', 'Produtos@Novo');
-Routes::post('/produto/novo', 'Produtos@Insere');
-
-Routes::get('/usuarios', 'Usuarios@Lista');
-
-Routes::get('/usuario/novo', 'Usuarios@Novo');
-Routes::post('/usuario/novo', 'Usuarios@Insere');
-
-Routes::get('/usuario/edita/{id}', 'Usuarios@Edita');
-Routes::post('/usuario/edita/{id}', 'Usuarios@Atualiza');
-
 Routes::get('/logout', 'Login@Logout');
 Routes::get('/login', 'Login@Index');
 Routes::post('/login', 'Login@Login');
+
+
+Routes::get('/admin', 'Administracao@Index');
+
+Routes::get('/admin/produtos', 'Produtos@Lista');
+
+Routes::get('/admin/produto/edit/{id}', 'Produtos@Edita');
+Routes::post('/admin/produto/edit/{id}', 'Produtos@Atualiza');
+
+Routes::get('/admin/produto/novo', 'Produtos@Novo');
+Routes::post('/admin/produto/novo', 'Produtos@Insere');
+
+Routes::get('/admin/usuarios', 'Usuarios@Lista');
+
+Routes::get('/admin/usuario/novo', 'Usuarios@Novo');
+Routes::post('/admin/usuario/novo', 'Usuarios@Insere');
+
+Routes::get('/admin/usuario/edita/{id}', 'Usuarios@Edita');
+Routes::post('/admin/usuario/edita/{id}', 'Usuarios@Atualiza');
+
 
 
 // Carrega a view da página de erro caso não encontre nenhuma das rotas para qualquer tipo de requisição, e qualquer rota recebida

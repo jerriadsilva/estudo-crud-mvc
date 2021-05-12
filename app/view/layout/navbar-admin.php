@@ -7,12 +7,12 @@
 			<li class="nav-item active">
 				<a class="nav-link" href="/"><?=SITE_NAME;?></a>
 			</li>
-			<?php if(!empty($UsuarioLogado->id)):?>
-			<?php if($UsuarioLogado->admin): ?>
 			<li class="nav-item">
-				<a class="nav-link" href="/admin">Area Administrativa</a>
+				<a class="nav-link" href="/usuarios">Usuarios</a>
 			</li>
-			<?php endif; ?>
+			<li class="nav-item">
+				<a class="nav-link" href="/produtos">Produtos</a>
+			</li>
 			<li class="nav-item dropdown">
 				<a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 					<?=$UsuarioLogado->nome;?>
@@ -21,10 +21,6 @@
 					<a class="dropdown-item" href="/logout">Logout</a>
 				</div>
 			</li>
-			<?php else: ?>
-			<li class="nav-item active">
-				<a class="nav-link" href="/login">Login</a>
-			</li><?php endif; ?>
 		</ul>
 	</div>
 </nav>

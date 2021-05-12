@@ -3,14 +3,23 @@ namespace app\core;
 
 class Views
 {
-	public static function Carrega(string $view, $params = [], $PageTitle = '')
+	/*
+	 * Carrega uma view especifica
+	 * O primeiro item sempre deve ser um layout principal, que fica na pasta app/views/layout, e o restante o caminho dentro de app/views para a view desejada
+	 * @param String $view: Layout e view a serem carregadas, no formato "layout_principal:path_da_view", onde o path da view é separada por (.) , sendo o primeiro item o layout principal, e o restante, o layout de conteudo
+	 * @param Array $params: Array Parâmetros que serão passados para a view, onde a chave de cada item será o nome da variável a ser disponibilizada
+	 * @param String $TituloPagina: Titulo da página
+	*/
+	public static function Carrega(string $view, $params = [], string $TituloPagina = '')
 	{
-		$ViewStr = explode('.', $view);
+		$Params = explode(':', $view);
 
-		$ArqLayout = array_shift($ViewStr);
-		$Conteudo = implode('/', $ViewStr);
+		$ArqLayout = $Params[0];
+		$Conteudo = !empty($Params[1])
+						? implode('/', explode('.', $Params[1]))
+						: '';
 
-		$ArqLayout = NormalizePath(BASEDIR.'app/view/layout/'.$ArqLayout.'.php');
+		$ArqLayout = NormalizaPath(BASEDIR.'app/view/layout/'.$ArqLayout.'.php');
 
 		if(!file_exists($ArqLayout))
 		{
@@ -19,7 +28,7 @@ class Views
 
 		if(!empty($Conteudo))
 		{
-			$Conteudo = NormalizePath(BASEDIR.'app/view/'.$Conteudo.'.php');
+			$Conteudo = NormalizaPath(BASEDIR.'app/view/'.$Conteudo.'.php');
 
 			if(!file_exists($Conteudo))
 			{

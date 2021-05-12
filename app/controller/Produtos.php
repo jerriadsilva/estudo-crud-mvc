@@ -13,15 +13,14 @@ class Produtos
 	{
 		Usuario::RequerLogin();
 		$Produtos = Produto::Lista();
-
-		Views::Carrega('main.produtos.listar', ['Produtos' => $Produtos], 'Produtos');
+		Views::Carrega('main:produtos.listar', ['Produtos' => $Produtos], 'Produtos');
 	}
 
 	public function Novo()
 	{
 		Usuario::RequerLogin();
 
-		Views::Carrega('main.produtos.novo', [
+		Views::Carrega('main:produtos.novo', [
 			'titulo' => 'Cadastrar Produto',
 			'Produto' => (new Produto())->Dados(),
 			'FormAction' => '/produto/novo'
@@ -38,7 +37,7 @@ class Produtos
 			return;
 		}
 
-		Views::Carrega('main.produtos.novo', [
+		Views::Carrega('main:produtos.novo', [
 			'titulo' => 'Editar produto',
 			'Produto' =>$Produto,
 			'FormAction' => '/produto/edit/'.$Produto->id

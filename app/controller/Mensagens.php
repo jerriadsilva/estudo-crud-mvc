@@ -23,6 +23,6 @@ class Mensagens
 
 	private static function Mensagem(array $Params, string $Title)
 	{
-		Views::Carrega('main.message', $Params, $Title);
+		Views::Carrega('main:message', $Params, $Title);
 	}
 }

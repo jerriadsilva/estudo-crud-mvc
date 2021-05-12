@@ -1,5 +1,5 @@
 <?php
-function NormalizePath(string $path) {
+function NormalizaPath(string $path) {
    return str_replace('\\', '/', $path);
 }
 

@@ -10,7 +10,7 @@ class Login
 {
 	public function index()
 	{
-		Views::Carrega('main.login.login', null, 'Login');
+		Views::Carrega('main:login.login', null, 'Login');
 	}
 
 	public function Logout()
