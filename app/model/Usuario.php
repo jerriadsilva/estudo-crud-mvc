@@ -138,11 +138,7 @@ class Usuario extends Models
 
 		$Status = $this->DB->Insert(self::TABLE, $dadosUsuario);
 
-		if($Status !== false)
-		{
-			Request::Direciona('/users');
-		}
-		return false;
+		return $Status;
 	}
 
 	public function Atualiza(array $userData)

@@ -23,7 +23,7 @@ class Usuarios
 		Views::Carrega('main:usuarios.novo', [
 			'titulo' => 'Novo usuário',
 			'Usuario' => (new Usuario())->Dados(),
-			'FormAction' => '/usuario/novo'
+			'FormAction' => '/admin/usuario/novo'
 		], 'Novo usuário');
 	}
 
@@ -42,7 +42,7 @@ class Usuarios
 		Views::Carrega('main:usuarios.novo', [
 			'titulo' 		=> 'Editar usuário',
 			'Usuario' 		=> $Usuario,
-			'FormAction' 	=> '/usuario/edita/'.$Usuario->id
+			'FormAction' 	=> '/admin/usuario/edita/'.$Usuario->id
 		]);
 	}
 
@@ -50,11 +50,13 @@ class Usuarios
 	{
 		Usuario::RequerLogin();
 
+		Formulario::VerificaHash('/admin/usuarios');
+
 		$Usuario = new Usuario();
 		$Status = $Usuario->Insere(Request::Input());
 		if($Status)
 		{
-			Request::Direciona('/usuarios');
+			Request::Direciona('/admin/usuarios');
 		}
 		else
 		{
@@ -66,6 +68,8 @@ class Usuarios
 	public function Atualiza(int $codusuario)
 	{
 		Usuario::RequerLogin();
+
+		Formulario::VerificaHash('/admin/usuarios');
 
 		$Usuario = new Usuario($codusuario);
 
@@ -79,7 +83,7 @@ class Usuarios
 
 		if($Status)
 		{
-			Request::Direciona('/usuarios');
+			Request::Direciona('/admin/usuarios');
 		}
 		else
 		{

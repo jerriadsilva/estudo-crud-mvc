@@ -6,6 +6,7 @@ use \app\model\Produto;
 use \app\model\Usuario;
 use \app\controller\Mensagens;
 use \app\core\Request;
+use \app\core\Formulario;
 
 class Produtos
 {
@@ -47,11 +48,14 @@ class Produtos
 	public function Insere()
 	{
 		Usuario::RequerLogin();
+
+		Formulario::VerificaHash('/admin/produtos');
+
 		$Produto = new Produto();
 		$Status = $Produto->Criar(Request::Input());
 		if($Status)
 		{
-			Request::Direciona('/produtos');
+			Request::Direciona('/admin/produtos');
 		}
 		else
 		{
@@ -64,6 +68,8 @@ class Produtos
 	{
 		Usuario::RequerLogin();
 
+		Formulario::VerificaHash('/admin/produtos');
+
 		$Produto = new Produto($codproduto);
 		if(!$Produto->Dados()->id)
 		{
@@ -75,7 +81,7 @@ class Produtos
 
 		if($Status)
 		{
-			Request::Direciona('/produtos');
+			Request::Direciona('/admin/produtos');
 		}
 		else
 		{

@@ -13,8 +13,8 @@ class Administracao
 		$Usuarios = Usuario::Lista();
 		$Produtos = Produto::Lista();
 		Views::Carrega('main:admin.principal', [
-			'Usuarios' => $Usuarios,
-			'Produtos' => $Produtos
+			'Usuarios' => count($Usuarios),
+			'Produtos' => count($Produtos)
 		], 'Administração');
 	}
 }

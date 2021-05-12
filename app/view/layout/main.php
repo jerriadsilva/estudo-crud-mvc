@@ -13,8 +13,11 @@
 </head>
 <body>
 <?php
-$Routes::CaminhoContem('/admin');
-include(__DIR__.'/navbar-guest.php') ?>
+if($Request::IniciaCom('/admin'))
+	include(__DIR__.'/navbar-admin.php');
+else
+	include(__DIR__.'/navbar-guest.php');
+?>
 <div role="main" class="justify-content-center">
 	<?php include($Conteudo) ?>
 </div>

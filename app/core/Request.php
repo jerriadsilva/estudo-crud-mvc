@@ -28,7 +28,7 @@ class Request
 	public static function Input()
 	{
 		$RequestInput = $_REQUEST;
-		unset($RequestInput['path']);
+		unset($RequestInput['path'], $RequestInput['hash_form']);
 		return $RequestInput;
 	}
 
@@ -41,7 +41,35 @@ class Request
 
 	public static function PostParams()
 	{
-		return $_POST;
+		$PostParams = $_POST;
+		unset($PostParams['hash_form']);
+		return $PostParams;
+	}
+
+	public static function Contem(string $busca)
+	{
+		$busca		= strtolower($busca);
+		$ParsedUrl 	= strtolower(parse_url($_SERVER['REQUEST_URI'])['path']);
+
+		return strpos($ParsedUrl, $busca) !== false;
+	}
+
+	public static function IniciaCom(string $busca)
+	{
+		$busca		= strtolower($busca);
+		$ParsedUrl 	= strtolower(parse_url($_SERVER['REQUEST_URI'])['path']);
+
+		return strpos($ParsedUrl, $busca) === 0;
+	}
+
+	public static function TerminaCom(string $busca)
+	{
+		$busca		= strtolower($busca);
+		$ParsedUrl 	= strtolower(parse_url($_SERVER['REQUEST_URI'])['path']);
+
+		$FinalUrl = substr($ParsedUrl, -count($busca));
+
+		return $busca === $FinalUrl;
 	}
 
 	public static function get()

@@ -8,10 +8,13 @@
 				<a class="nav-link" href="/"><?=SITE_NAME;?></a>
 			</li>
 			<li class="nav-item">
-				<a class="nav-link" href="/usuarios">Usuarios</a>
+				<a class="nav-link" href="/admin">Area Administrativa</a>
 			</li>
 			<li class="nav-item">
-				<a class="nav-link" href="/produtos">Produtos</a>
+				<a class="nav-link" href="/admin/usuarios">Usuarios</a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link" href="/admin/produtos">Produtos</a>
 			</li>
 			<li class="nav-item dropdown">
 				<a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

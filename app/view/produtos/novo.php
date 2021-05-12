@@ -14,6 +14,7 @@
 				<label for="valor">Valor</label>
 				<input type="text" class="form-control" name="valor" id="valor" placeholder="R$0,00" value="<?=$Produto->valor??'';?>">
 			</div>
+			<input type="hidden" name="hash_form" value="<?=$Formulario::GeraHashForm();?>">
 			<button type="submit" class="btn btn-primary mt-3">Enviar</button>
 		</form>
 	</div>

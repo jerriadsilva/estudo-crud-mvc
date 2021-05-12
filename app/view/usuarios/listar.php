@@ -8,7 +8,7 @@
 					<th scope="col">Nome</th>
 					<th scope="col">Email</th>
 					<th scope="col">Admin</th>
-					<th scope="col"><a href="/usuario/novo">Cadastrar</a></th>
+					<th scope="col"><a href="/admin/usuario/novo">Cadastrar</a></th>
 				</tr>
 			</thead>
 			<tbody>
@@ -18,7 +18,7 @@
 					<td><?=$Usuario->nome;?></td>
 					<td><?=$Usuario->email;?></td>
 					<td><?=$Usuario->admin;?></td>
-					<td><a href="/usuario/edita/<?=$Usuario->id;?>">Editar</a></td>
+					<td><a href="/admin/usuario/edita/<?=$Usuario->id;?>">Editar</a></td>
 				</tr>
 				<?php endforeach; ?>
 			</tbody>

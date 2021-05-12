@@ -8,7 +8,7 @@
 					<th scope="col">Nome</th>
 					<th scope="col">Descrição</th>
 					<th scope="col">Valor</th>
-					<th scope="col"><a href="/produto/novo">Cadastrar</a></th>
+					<th scope="col"><a href="/admin/produto/novo">Cadastrar</a></th>
 				</tr>
 			</thead>
 			<tbody>
@@ -18,7 +18,7 @@
 					<td><?=$Produto->nome;?></td>
 					<td><?=$Produto->descricao;?></td>
 					<td><?=$Produto->valor;?></td>
-					<td><a href="/produto/edit/<?=$Produto->id;?>">Editar</a></td>
+					<td><a href="/admin/produto/edit/<?=$Produto->id;?>">Editar</a></td>
 				</tr>
 				<?php endforeach; ?>
 			</tbody>

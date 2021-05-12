@@ -22,14 +22,6 @@ class Routes
 		];
 	}
 
-	public static function CaminhoContem(string $busca)
-	{
-		$busca		= strtolower($busca);
-		$ParsedUrl 	= strtolower(parse_url($_SERVER['REQUEST_URI'])['path']);
-
-		return strpos($ParsedUrl, $busca) !== false;
-	}
-
 	public static function PathInUriRequest($path)
 	{
 		$ParsedUrl 	= parse_url($_SERVER['REQUEST_URI']);
