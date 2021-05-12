@@ -11,7 +11,7 @@
  Target Server Version : 100418
  File Encoding         : 65001
 
- Date: 11/05/2021 17:32:13
+ Date: 12/05/2021 16:43:23
 */
 
 SET NAMES utf8mb4;
@@ -51,13 +51,14 @@ CREATE TABLE `usuarios`  (
   `admin` bit(1) NULL DEFAULT b'0',
   `passwd` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 6 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 7 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of usuarios
 -- ----------------------------
-INSERT INTO `usuarios` VALUES (3, '2021-05-10 14:51:44', '2021-05-11 09:29:34', 'Jerri Dick', 'email@gmail.com', b'1', '$2y$10$5ydZbPaEHSuGguPMpQxgfOAdbla3dgvdIF8URK1/AUvWQEp4bbRFq');
-INSERT INTO `usuarios` VALUES (4, '2021-05-10 16:48:46', '2021-05-11 17:12:45', 'teste novo', 'email2@gmail.com', b'0', '');
-INSERT INTO `usuarios` VALUES (5, '2021-05-10 16:49:32', '2021-05-11 09:28:11', 'teste usuario 2', 'email3@gmail.com', b'0', '$2y$10$8jVX6oE25e3YIxThORDRzevQ8xNhxmxUKJUOB/98DH./3KPBTsrfG');
+INSERT INTO `usuarios` VALUES (3, '2021-05-10 14:51:44', '2021-05-12 15:26:32', 'Administrador', 'admin@email.com', b'1', '$2y$10$5ydZbPaEHSuGguPMpQxgfOAdbla3dgvdIF8URK1/AUvWQEp4bbRFq');
+INSERT INTO `usuarios` VALUES (4, '2021-05-10 16:48:46', '2021-05-12 15:26:47', 'Usuario 1', 'usuario@email.com', b'0', '');
+INSERT INTO `usuarios` VALUES (5, '2021-05-10 16:49:32', '2021-05-12 15:27:03', 'Usuario 2', 'usuario2@email.com', b'0', '$2y$10$8jVX6oE25e3YIxThORDRzevQ8xNhxmxUKJUOB/98DH./3KPBTsrfG');
+INSERT INTO `usuarios` VALUES (6, '2021-05-12 15:22:47', '2021-05-12 15:27:16', 'Usuario 3', 'usuario3@email.com', b'0', '$2y$10$LIek6GUYW6N.DdBGYP3bpeisvO8ImB/sFrESOXkKxQGgNRvsKKrFi');
 
 SET FOREIGN_KEY_CHECKS = 1;
